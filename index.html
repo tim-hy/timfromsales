@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -13,14 +13,14 @@
     h2 { font-size: 13px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; margin-top: 48px; border-bottom: 1px solid #000; padding-bottom: 4px; }
     h3 { font-size: 13px; font-weight: bold; letter-spacing: 0.08em; margin-bottom: 14px; margin-top: 48px; border-bottom: 1px solid #000; padding-bottom: 4px; }
     .links p { font-size: 14px; line-height: 2; }
-    .discography { margin-top: 4px; }
-    .release-row { display: grid; grid-template-columns: 56px 1fr auto; align-items: center; gap: 16px; padding: 10px 0; border-bottom: 1px solid #e0e0e0; text-decoration: none; color: #000; }
+    .discography { margin-top: 4px;}
+    .release-row { display: grid; grid-template-columns: 64px 1fr auto; align-items: center; gap: 48px; padding: 10px 0; border-bottom: 1px solid #e0e0e0; text-decoration: none; color: #000; }
     .release-row:last-child { border-bottom: none; }
-    .release-row img { width: 64px; height: 64px; object-fit: cover; display: block; }
-    .release-info .r-title { font-size: 14px; font-weight: bold; }
+    .release-row img { width: 80px; height: 80px; object-fit: cover; display: block;}
+    .release-info .r-title { font-size: 14px; font-weight: bold;}
     .release-info .r-meta { font-size: 12px; color: #666; margin-top: 2px; }
     .release-link-label { font-size: 11px; text-decoration: underline; white-space: nowrap; }
-    .mix-row { padding: 10px 0; border-bottom: 1px solid #e0e0e0; font-size: 14px; }
+    .mix-row { padding: 10px 0; border-bottom: 1px solid #e0e0e0; font-size: 14px;}
     .mix-row:last-child { border-bottom: none; }
     .mix-row a { text-decoration: underline; }
     .mix-meta { font-size: 12px; color: #666; margin-top: 2px; }
@@ -29,10 +29,44 @@
     .container {display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); grid-auto-rows: 200px; grid-gap: 5px; grid-auto-flow: dense;}
     footer { margin-top: 60px; font-size: 11px; color: #999; border-top: 1px solid #e0e0e0; padding-top: 16px; }
     @media (max-width: 600px) { body { padding: 20px; } h1 { font-size: 32px; } .release-row { grid-template-columns: 48px 1fr; } .release-link-label { display: none; } }
+    #countdown-banner {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #000;
+      color: #bebebe;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 14px;
+      font-weight: bold;
+      z-index: 9999;
+      border-top: 1px solid #ffffff;
+  }
+  .scrolling-content {
+    white-space: nowrap;
+    padding-left: 100%; /* Start the text off-screen */
+    animation: marquee-scroll 30s linear infinite;
+  }
+  @keyframes marquee-scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+  }
+  /* Add padding to body so banner doesn't cover content */
+  body {
+    padding-bottom: 50px !important;
+  }
   </style>
 </head>
 <body>
   <h1>timfromsales</h1>
+  <div id="countdown-banner">
+  <div class="scrolling-content" id="wednesday-text">
+  </div>
+  </div>
   <h2>Links</h2>
   <div class="links">
     <p><a href="https://www.instagram.com/timfromsales/" target="_blank">Instagram</a></p>
@@ -55,7 +89,6 @@
   <h2>Subtle Radio Show</h2>
   <p><a href="https://subtleradio.com/residents/touching-bass">📻 Touching Bass w/ timfromsales</a></p>
   <p class="mix-meta">11:00–12:00, every last Wednesday of the month</p>
-  <br></br>
   <div id="wednesday-countdown" style="font-size: 18px; color: #2d302c;"></div>
   <h3>listen to a random song I like (different every time)</h3>
 <div class="sc-wrap">
@@ -126,7 +159,7 @@
 <script>
   function calculateNextLastWednesday() {
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Reset time for accurate day counting
+    today.setHours(0, 0, 0, 0);
     
     let targetDate = null;
     let monthOffset = 0;
@@ -134,39 +167,37 @@
     while (targetDate === null) {
       const year = today.getFullYear();
       const month = today.getMonth() + monthOffset;
-      
-      // Get the last day of the month being checked
       const lastDayOfMonth = new Date(year, month + 1, 0);
       
-      // Find the last Wednesday (Day 3)
       let daysToSubtract = lastDayOfMonth.getDay() - 3;
       if (daysToSubtract < 0) daysToSubtract += 7;
       
       const lastWednesday = new Date(year, month, lastDayOfMonth.getDate() - daysToSubtract);
       lastWednesday.setHours(0, 0, 0, 0);
 
-      // If the last Wednesday is today or in the future, we found it
       if (lastWednesday >= today) {
         targetDate = lastWednesday;
       } else {
-        // If it passed, move to the next month and loop again
         monthOffset++;
       }
     }
 
-    // Calculate difference
     const diffInMs = targetDate - today;
     const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
 
-    // Display Logic
-    const element = document.getElementById('wednesday-countdown');
+    const element = document.getElementById('wednesday-text');
+    let message = "";
+    
     if (diffInDays === 0) {
-      element.innerText = "Next show is today!";
+      message = "🚨 Next show is today 11:00–12:00! Tune in at subtleradio.com ";
     } else {
-      element.innerText = `${diffInDays} days until the next show 🕰️`;
+      message = `${diffInDays} days until next radio show \u00A0\u00A0 📻 \u00A0\u00A0`;
     }
+
+    element.innerText = message.repeat(5);
   }
 
+  // Run on load
   calculateNextLastWednesday();
 </script>
 </div>  <footer>© 2026 package_emoji</footer>
