@@ -16,7 +16,7 @@
     .discography { margin-top: 4px; }
     .release-row { display: grid; grid-template-columns: 56px 1fr auto; align-items: center; gap: 16px; padding: 10px 0; border-bottom: 1px solid #e0e0e0; text-decoration: none; color: #000; }
     .release-row:last-child { border-bottom: none; }
-    .release-row img { width: 56px; height: 56px; object-fit: cover; display: block; }
+    .release-row img { width: 64px; height: 64px; object-fit: cover; display: block; }
     .release-info .r-title { font-size: 14px; font-weight: bold; }
     .release-info .r-meta { font-size: 12px; color: #666; margin-top: 2px; }
     .release-link-label { font-size: 11px; text-decoration: underline; white-space: nowrap; }
@@ -26,6 +26,7 @@
     .mix-meta { font-size: 12px; color: #666; margin-top: 2px; }
     .sc-wrap { margin-top: 4px; }
     .sc-wrap iframe { width: 100%; display: block; border: none; }
+    .container {display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); grid-auto-rows: 200px; grid-gap: 5px; grid-auto-flow: dense;}
     footer { margin-top: 60px; font-size: 11px; color: #999; border-top: 1px solid #e0e0e0; padding-top: 16px; }
     @media (max-width: 600px) { body { padding: 20px; } h1 { font-size: 32px; } .release-row { grid-template-columns: 48px 1fr; } .release-link-label { display: none; } }
   </style>
@@ -38,24 +39,24 @@
     <p><a href="https://soundcloud.com/timfromsales" target="_blank">SoundCloud</a></p>
     <p><a href="https://ra.co/dj/timfromsales" target="_blank">RA</a></p>
   </div>
-  <h2>Recent Mixes</h2>
+  <h2>Most Recent Mixes</h2>
   <div class="discography">
+    <a class="release-row" href="https://soundcloud.com/subtleradio/touching-bass-w-timfromsales-1" target="_blank" rel="noopener">
+      <img src="images/apr26.jpg" alt="apr26"/>
+      <div class="release-info"><div class="r-title">22/04/2026 - b2b w/ Shivani</div><div class="r-meta">Techno · Funky · Garage</div></div>
+      <span class="release-link-label">SoundCloud</span>
+    </a>
     <a class="release-row" href="https://soundcloud.com/subtleradio/touching-bass-w-timfromsales" target="_blank" rel="noopener">
-      <img src="images/mar26.jpg" alt="Checking Media Presence" />
+      <img src="images/mar26.jpg" alt="mar26"/>
       <div class="release-info"><div class="r-title">25/03/2026</div><div class="r-meta">Techno · Electro · House</div></div>
       <span class="release-link-label">SoundCloud</span>
     </a>
   </div>
-  <h2>Subtle Radio Shows</h2>
-  <div class="mix-row">
-    <div><a href="https://www.subtleradio.com/archives/touching-bass-w-timfromsales-25-03-2026" target="_blank" rel="noopener">25/03/2026</a></div>
-    <div class="mix-meta">Techno · Electro · House</div>
-  </div>
-  <h2>Mixes</h2>
-  <div class="sc-wrap">
-    <!-- <iframe src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%3Aplaylists%3A2108956575&color=%23000000&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true" height="360" allow="autoplay" scrolling="no"></iframe> -->
-    <iframe width="100%" height="450" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A2151919160&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/timfromsales" title="timfromsales" target="_blank" style="color: #cccccc; text-decoration: none;">timfromsales</a> · <a href="https://soundcloud.com/timfromsales/sets/my-mixes" title="My Mixes" target="_blank" style="color: #cccccc; text-decoration: none;">My Mixes</a></div>
-  </div>
+  <h2>Subtle Radio Show</h2>
+  <p><a href="https://subtleradio.com/residents/touching-bass">📻 Touching Bass w/ timfromsales</a></p>
+  <p class="mix-meta">11:00–12:00, every last Wednesday of the month</p>
+  <br></br>
+  <div id="wednesday-countdown" style="font-size: 18px; color: #2d302c;"></div>
   <h3>listen to a random song I like (different every time)</h3>
 <div class="sc-wrap">
   <script src="tracks.js"></script>
@@ -121,6 +122,53 @@
     }
     document.getElementById('random-track-link').addEventListener('click', openRandomTrack);
   </script>
+</div>
+<script>
+  function calculateNextLastWednesday() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time for accurate day counting
+    
+    let targetDate = null;
+    let monthOffset = 0;
+
+    while (targetDate === null) {
+      const year = today.getFullYear();
+      const month = today.getMonth() + monthOffset;
+      
+      // Get the last day of the month being checked
+      const lastDayOfMonth = new Date(year, month + 1, 0);
+      
+      // Find the last Wednesday (Day 3)
+      let daysToSubtract = lastDayOfMonth.getDay() - 3;
+      if (daysToSubtract < 0) daysToSubtract += 7;
+      
+      const lastWednesday = new Date(year, month, lastDayOfMonth.getDate() - daysToSubtract);
+      lastWednesday.setHours(0, 0, 0, 0);
+
+      // If the last Wednesday is today or in the future, we found it
+      if (lastWednesday >= today) {
+        targetDate = lastWednesday;
+      } else {
+        // If it passed, move to the next month and loop again
+        monthOffset++;
+      }
+    }
+
+    // Calculate difference
+    const diffInMs = targetDate - today;
+    const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+
+    // Display Logic
+    const element = document.getElementById('wednesday-countdown');
+    if (diffInDays === 0) {
+      element.innerText = "Next show is today!";
+    } else {
+      element.innerText = `${diffInDays} days until the next show 🕰️`;
+    }
+  }
+
+  calculateNextLastWednesday();
+</script>
 </div>  <footer>© 2026 package_emoji</footer>
   </body>
 </html>
