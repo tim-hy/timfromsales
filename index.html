@@ -41,7 +41,7 @@
   <h2>Recent Mixes</h2>
   <div class="discography">
     <a class="release-row" href="https://soundcloud.com/subtleradio/touching-bass-w-timfromsales" target="_blank" rel="noopener">
-      <img src="images/mar26.jpg" alt="mar26" />
+      <img src="images/mar26.jpg" alt="Checking Media Presence" />
       <div class="release-info"><div class="r-title">25/03/2026</div><div class="r-meta">Techno · Electro · House</div></div>
       <span class="release-link-label">SoundCloud</span>
     </a>
@@ -56,16 +56,71 @@
     <!-- <iframe src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%3Aplaylists%3A2108956575&color=%23000000&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true" height="360" allow="autoplay" scrolling="no"></iframe> -->
     <iframe width="100%" height="450" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/soundcloud%253Aplaylists%253A2151919160&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/timfromsales" title="timfromsales" target="_blank" style="color: #cccccc; text-decoration: none;">timfromsales</a> · <a href="https://soundcloud.com/timfromsales/sets/my-mixes" title="My Mixes" target="_blank" style="color: #cccccc; text-decoration: none;">My Mixes</a></div>
   </div>
-  <h3>randomly pull a song I like</h3>
-    <div class="sc-wrap">
-      <script src="tracks.js"></script>
-      <script>
-        if (typeof tracks !== 'undefined') {
-          var selected_track = tracks[Math.floor(Math.random() * tracks.length)];
-          document.write('<p><a href="' + selected_track + '" target="_blank">surprise yourself</a></p>');
-        }
-      </script>
-    </div>
-    <footer>© 2026 package_emoji</footer>
+  <h3>listen to a random song I like (different every time)</h3>
+<div class="sc-wrap">
+  <script src="tracks.js"></script>
+  
+  <style>
+    .cube-link-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .music-cube {
+      font-size: 14px;
+      color: #2ecc71;
+      line-height: 1;
+      display: inline-block;
+    }
+    .flip-x {
+      transform: scaleX(-1);
+    }
+    .cube-anim::before {
+      content: "▚";
+      animation: cube-spin 0.6s steps(1) infinite;
+    }
+    @keyframes cube-spin {
+      0%   { content: "▞"; color: #2ecc71; }
+      25%  { content: "▟"; color: #1abc9c; }
+      50%  { content: "▚"; color: #2ecc71; }
+      75%  { content: "▜"; color: #f1c40f; }
+      100% { content: "▞"; color: #2ecc71; }
+    }
+    .cube-link-wrapper p { margin: 0; }
+    
+    /* Optional: make the link look more like a button */
+    .cube-link-wrapper a {
+      color: #3498db;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .cube-link-wrapper a:hover {
+      text-decoration: underline;
+    }
+  </style>
+
+  <div class="cube-link-wrapper">
+    <span class="music-cube cube-anim" aria-hidden="true"></span>
+    <p>
+      <a href="#" id="random-track-link">surprise yourself</a>
+    </p>
+    <span class="music-cube cube-anim flip-x" aria-hidden="true"></span>
+  </div>
+
+  <script>
+    function openRandomTrack(event) {
+      // Prevent the default "#" link behavior
+      event.preventDefault();
+      if (typeof tracks !== 'undefined' && tracks.length > 0) {
+        // Pick random track on click
+        var random_url = tracks[Math.floor(Math.random() * tracks.length)];
+        window.open(random_url, '_blank');
+      } else {
+        console.error("Tracks array is missing or empty");
+      }
+    }
+    document.getElementById('random-track-link').addEventListener('click', openRandomTrack);
+  </script>
+</div>  <footer>© 2026 package_emoji</footer>
   </body>
-  </html>
+</html>
