@@ -9,5 +9,9 @@ var tracks = [
     "https://tidal.com/track/455713360/u", 
     "https://tidal.com/track/284620037/u", 
     "https://tidal.com/track/427615333/u", 
-    "https://tidal.com/track/470378713/u"
+    "https://tidal.com/track/470378713/u",
+    "https://tidal.com/track/477775770/u",
+    "https://soundcloud.com/cooppresents/somethin-truthful-ft-liam-shortall",
+    "https://soundcloud.com/jackyboomdj/what-are-you-doing",
+    "https://artreform.bandcamp.com/track/tubular-bells"
 ];
