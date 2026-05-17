@@ -163,7 +163,6 @@
 <script>
   function calculateNextLastWednesday() {
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
     
     let targetDate = null;
     let monthOffset = 0;
@@ -175,33 +174,52 @@
       
       let daysToSubtract = lastDayOfMonth.getDay() - 3;
       if (daysToSubtract < 0) daysToSubtract += 7;
-      
-      const lastWednesday = new Date(year, month, lastDayOfMonth.getDate() - daysToSubtract);
-      lastWednesday.setHours(0, 0, 0, 0);
 
-      if (lastWednesday >= today) {
-        targetDate = lastWednesday;
+      // target day
+      const lastWednesday = new Date(year, month, lastDayOfMonth.getDate() - daysToSubtract);
+      
+      // Set show time window
+      const showStartTime = new Date(lastWednesday).setHours(11, 0, 0, 0);
+      const showEndTime = new Date(lastWednesday).setHours(12, 0, 0, 0);
+      
+      // 24 hours before show starts
+      const twentyFourHoursBefore = showStartTime - (24 * 60 * 60 * 1000);
+
+      if (today <= showEndTime) {
+        targetDate = {
+          start: showStartTime,
+          end: showEndTime,
+          preWindow: twentyFourHoursBefore,
+          dayOf: lastWednesday
+        };
       } else {
+        // move to next month if passed show
         monthOffset++;
       }
     }
 
-    const diffInMs = targetDate - today;
-    const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
-
     const element = document.getElementById('wednesday-text');
     let message = "";
     
-    if (diffInDays === 0) {
-      message = "🚨 Next show is today 11:00–12:00! Tune in at subtleradio.com ";
+    if (today >= targetDate.preWindow && today <= targetDate.end) {
+      if (today.getDay() === 3) {
+        message = "🚨 Next show is TODAY 11:00–12:00! Tune in at subtleradio.com ";
+      } else {
+        message = "⏳ Next show is TOMORROW 11:00–12:00! Tune in at subtleradio.com ";
+      }
     } else {
+      const cleanToday = new Date(today).setHours(0, 0, 0, 0);
+      const cleanTarget = new Date(targetDate.dayOf).setHours(0, 0, 0, 0);
+      
+      const diffInMs = cleanTarget - cleanToday;
+      const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+      
       message = `${diffInDays} days until next radio show \u00A0\u00A0 📻 \u00A0\u00A0`;
     }
 
     element.innerText = message.repeat(5);
   }
 
-  // Run on load
   calculateNextLastWednesday();
 </script>
 </div>  <footer>© 2026 package_emoji</footer>
