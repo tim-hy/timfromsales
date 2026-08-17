@@ -5,188 +5,336 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>timfromsales</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: Helvetica, Arial, sans-serif; background: #fff; color: #000; padding: 40px; max-width: 800px; }
-    a { color: #000; }
-    a:visited { color: #000; }
-    h1 { font-size: 48px; font-weight: bold; letter-spacing: -0.01em; margin-bottom: 40px; line-height: 1; }
-    h2 { font-size: 13px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px; margin-top: 48px; border-bottom: 1px solid #000; padding-bottom: 4px; }
-    h3 { font-size: 13px; font-weight: bold; letter-spacing: 0.08em; margin-bottom: 14px; margin-top: 48px; border-bottom: 1px solid #000; padding-bottom: 4px; }
-    .links p { font-size: 14px; line-height: 2; }
-    .discography { margin-top: 4px;}
-    .release-row { display: grid; grid-template-columns: 64px 1fr auto; align-items: center; gap: 48px; padding: 10px 0; border-bottom: 1px solid #e0e0e0; text-decoration: none; color: #000; }
-    .release-row:last-child { border-bottom: none; }
-    .release-row img { width: 80px; height: 80px; object-fit: cover; display: block;}
-    .release-info .r-title { font-size: 14px; font-weight: bold;}
-    .release-info .r-meta { font-size: 12px; color: #666; margin-top: 2px; }
-    .release-link-label { font-size: 11px; text-decoration: underline; white-space: nowrap; }
-    .mix-row { padding: 10px 0; border-bottom: 1px solid #e0e0e0; font-size: 14px;}
-    .mix-row:last-child { border-bottom: none; }
-    .mix-row a { text-decoration: underline; }
-    .mix-meta { font-size: 12px; color: #666; margin-top: 2px; }
-    .sc-wrap { margin-top: 4px; }
-    .sc-wrap iframe { width: 100%; display: block; border: none; }
-    .container {display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); grid-auto-rows: 200px; grid-gap: 5px; grid-auto-flow: dense;}
-    footer { margin-top: 60px; font-size: 11px; color: #999; border-top: 1px solid #e0e0e0; padding-top: 16px; }
-    @media (max-width: 600px) { body { padding: 20px; } h1 { font-size: 32px; } .release-row { grid-template-columns: 48px 1fr; } .release-link-label { display: none; } }
+    :root {
+      --bg-top: #f8f2d8;
+      --bg-mid: #f7ecbe;
+      --bg-bottom: #90d0ee;
+      --ink: #000000;
+      --link: #0000ee;
+      --visited: #551a8b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: "Times New Roman", Times, serif;
+      color: var(--ink);
+      background: linear-gradient(to bottom, var(--bg-top) 0%, var(--bg-mid) 85%, var(--bg-bottom) 100%);
+      margin: 0;
+      padding: 24px 12px 64px;
+      line-height: 1.5;
+    }
+
+    .page-shell {
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    td {
+      padding: 4px 0;
+      vertical-align: top;
+    }
+
+    a {
+      color: var(--link);
+      text-decoration: underline;
+    }
+
+    a:visited { color: var(--visited); }
+
+    h1 {
+      font-size: 48px;
+      font-weight: bold;
+      margin: 0 0 18px;
+      line-height: 1;
+      font-family: "Times New Roman", Times, serif;
+    }
+
+    h2, h3 {
+      font-size: 18px;
+      font-weight: bold;
+      margin: 24px 0 10px;
+      font-family: "Times New Roman", Times, serif;
+    }
+
+    p {
+      font-size: 16px;
+      margin: 0 0 8px;
+    }
+
+    .links p,
+    .mix-meta,
+    .r-meta,
+    .release-link-label,
+    footer {
+      font-size: 12px;
+    }
+
+    .discography td {
+      border-top: 1px solid #000;
+      padding: 8px 4px;
+    }
+
+    .discography img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border: 1px solid #000;
+      display: block;
+    }
+
+    .discography .title {
+      font-weight: bold;
+    }
+
+    .discography .meta {
+      font-size: 12px;
+    }
+
+    .cube-link-wrapper {
+      display: block;
+      margin-top: 8px;
+    }
+
+    .cube-link-wrapper img {
+      width: 14px;
+      height: 14px;
+      vertical-align: middle;
+    }
+
+    .sc-wrap {
+      margin-top: 12px;
+      padding: 8px 0;
+    }
+
+    .sc-wrap a {
+      font-weight: bold;
+    }
+
+    footer {
+      margin-top: 28px;
+      border-top: 1px solid #000;
+      padding-top: 8px;
+    }
+
     #countdown-banner {
       position: fixed;
       bottom: 0;
       left: 0;
       width: 100%;
       background: #000;
-      color: #bebebe;
-      height: 40px;
+      color: #fff;
+      height: 36px;
       display: flex;
       align-items: center;
       overflow: hidden;
-      font-family: 'Courier New', Courier, monospace;
-      font-size: 14px;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 12px;
       font-weight: bold;
       z-index: 9999;
-      border-top: 1px solid #ffffff;
-  }
-  .scrolling-content {
-    white-space: nowrap;
-    padding-left: 100%; /* Start the text off-screen */
-    animation: marquee-scroll 30s linear infinite;
-  }
-  @keyframes marquee-scroll {
-    0%   { transform: translateX(0); }
-    100% { transform: translateX(-100%); }
-  }
-  /* Add padding to body so banner doesn't cover content */
-  body {
-    padding-bottom: 50px !important;
-  }
+      border-top: 1px solid #fff;
+    }
+
+    .scrolling-content {
+      white-space: nowrap;
+      padding-left: 100%;
+      animation: marquee-scroll 22s linear infinite;
+    }
+
+    @keyframes marquee-scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+    body {
+      padding-bottom: 52px !important;
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 36px; }
+      .discography img { width: 80px; height: 80px; margin: 8px}
+    }
   </style>
 </head>
 <body>
-  <h1>timfromsales</h1>
-  <div id="countdown-banner">
-  <div class="scrolling-content" id="wednesday-text">
-  </div>
-  </div>
-  <h2>Links</h2>
-  <div class="links">
-    <p><a href="https://www.instagram.com/timfromsales/" target="_blank">Instagram</a></p>
-    <p><a href="https://soundcloud.com/timfromsales" target="_blank">SoundCloud</a></p>
-    <p><a href="https://ra.co/dj/timfromsales" target="_blank">RA</a></p>
-  </div>
-  <h2>Subtle Radio Show</h2>
-  <p><a href="https://subtleradio.com/residents/touching-bass">📻 Touching Bass w/ timfromsales</a></p>
-  <p class="mix-meta">11:00–12:00, every 4th Wednesday of the month</p>
-  <h2>Recent Mixes</h2>
-  <div class="discography">
-    <a class="release-row" href="https://soundcloud.com/subtleradio/touching-bass-w-timfromsales-4" target="_blank" rel="noopener">
-      <img src="images/july26.jpg" alt="july26"/>
-      <div class="release-info"><div class="r-title">Touching Bass w/ timfromsales (100% vinyl)</div><div class="r-meta">22/07/2026 ▫️ House · Techno · Left Field</div></div>
-      <span class="release-link-label">SoundCloud</span>
-    </a>
-    <a class="release-row" href="https://soundcloud.com/subtleradio/touching-bass-25-02-2026" target="_blank" rel="noopener">
-      <img src="images/june26.jpg" alt="june26"/>
-      <div class="release-info"><div class="r-title">Touching Bass w/ timfromsales</div><div class="r-meta">24/06/2026 ▫️ House · Electronica · Left Field</div></div>
-      <span class="release-link-label">SoundCloud</span>
-    </a>
-    <a class="release-row" href="https://soundcloud.com/subtleradio/touching-bass-w-timfromsales-2" target="_blank" rel="noopener">
-      <img src="images/may26.jpg" alt="may26"/>
-      <div class="release-info"><div class="r-title">Touching Bass w/ timfromsales</div><div class="r-meta">27/05/2026 ▫️ Garage · House · Breaks</div></div>
-      <span class="release-link-label">SoundCloud</span>
-    </a>
-    <a class="release-row" href="https://soundcloud.com/subtleradio/touching-bass-w-timfromsales-1" target="_blank" rel="noopener">
-      <img src="images/apr26.jpg" alt="apr26"/>
-      <div class="release-info"><div class="r-title">Touching Bass w/ timfromsales & Shivani</div><div class="r-meta">22/04/2026 ▫️ Techno · Funky · Garage</div></div>
-      <span class="release-link-label">SoundCloud</span>
-    </a>
-  </div>
-  <div id="wednesday-countdown" style="font-size: 18px; color: #2d302c;"></div>
-  <h3>listen to a random song I like (different every time)</h3>
-<div class="sc-wrap">
-  <script src="tracks.js"></script>
-
-  <div class="cube-link-wrapper">
-    <p>
-      <img src="images/cube.gif"/>
-      <a href="#" id="random-track-link">surprise yourself</a>
-      <img src="images/cube.gif"/>
-    </p>
+  <div class="page-shell">
+    <img style= "display: block; width: 50%; max-width: 250px;" class="title-image" src="images/page assets/title.png" alt="timfromsales title" />
   </div>
 
-  <script>
-    function openRandomTrack(event) {
-      // Prevent the default "#" link behavior
-      event.preventDefault();
-      if (typeof tracks !== 'undefined' && tracks.length > 0) {
-        // Pick random track on click
-        var random_url = tracks[Math.floor(Math.random() * tracks.length)];
-        window.open(random_url, '_blank');
-      } else {
-        console.error("Tracks array is missing or empty");
-      }
-    }
-    document.getElementById('random-track-link').addEventListener('click', openRandomTrack);
-  </script>
-</div>
-<script>
-  function calculateNextFourthWednesday() {
-    const today = new Date();
-    
-    let targetDate = null;
-    let monthOffset = 0;
+  <table>
+    <tr>
+      <td>
+        <div id="countdown-banner">
+          <div class="scrolling-content" id="wednesday-text"></div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <h2>Links <img style="vertical-align: middle; height: 25px" src="images/page assets/printer.gif" alt="printer"></img></h2>
+        <div class="links">
+          <p><a href="https://www.instagram.com/timfromsales/" target="_blank">Instagram</a></p>
+          <p><a href="https://soundcloud.com/timfromsales" target="_blank">SoundCloud</a></p>
+          <p><a href="https://ra.co/dj/timfromsales" target="_blank">RA</a></p>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td valign="top">
+              <h2>Subtle Radio Show</h2>
+              <p><a href="https://subtleradio.com/residents/touching-bass">📻 Touching Bass w/ timfromsales</a></p>
+              <p class="mix-meta">11:00–12:00, every 4th Wednesday of the month</p>
+            </td>
+            <td width="150" valign="top" align="right">
+              <img style="display:block; width: min(90px, 100%); margin-right: min(200px, 5%); margin-top: 25px; transform: rotate(20deg)" src="images/page assets/dj.gif" alt="dj" />
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <h2>Recent Mixes</h2>
+        <table class="discography" border="1" cellpadding="4" cellspacing="0">
+          <tr>
+            <td width="90"><img src="images/july26.jpg" alt="july26" /></td>
+            <td>
+              <div class="title">Touching Bass w/ timfromsales (100% vinyl)</div>
+              <div class="meta">22/07/2026 ▫️ House · Techno · Left Field</div>
+            </td>
+            <td width="120"><a href="https://soundcloud.com/subtleradio/touching-bass-w-timfromsales-4" target="_blank" rel="noopener">SoundCloud</a></td>
+          </tr>
+          <tr>
+            <td width="90"><img src="images/june26.jpg" alt="june26" /></td>
+            <td>
+              <div class="title">Touching Bass w/ timfromsales</div>
+              <div class="meta">24/06/2026 ▫️ House · Electronica · Left Field</div>
+            </td>
+            <td width="120"><a href="https://soundcloud.com/subtleradio/touching-bass-25-02-2026" target="_blank" rel="noopener">SoundCloud</a></td>
+          </tr>
+          <tr>
+            <td width="90"><img src="images/may26.jpg" alt="may26" /></td>
+            <td>
+              <div class="title">Touching Bass w/ timfromsales</div>
+              <div class="meta">27/05/2026 ▫️ Garage · House · Breaks</div>
+            </td>
+            <td width="120"><a href="https://soundcloud.com/subtleradio/touching-bass-w-timfromsales-2" target="_blank" rel="noopener">SoundCloud</a></td>
+          </tr>
+          <tr>
+            <td width="90"><img src="images/apr26.jpg" alt="apr26" /></td>
+            <td>
+              <div class="title">Touching Bass w/ timfromsales &amp; Shivani</div>
+              <div class="meta">22/04/2026 ▫️ Techno · Funky · Garage</div>
+            </td>
+            <td width="120"><a href="https://soundcloud.com/subtleradio/touching-bass-w-timfromsales-1" target="_blank" rel="noopener">SoundCloud</a></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div id="wednesday-countdown" style="font-size: 18px; color: #2d302c;"></div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <h3>listen to a random song I like (different every time)</h3>
+        <div class="sc-wrap">
+          <script src="tracks.js"></script>
 
-    while (targetDate === null) {
-      const baseDate = new Date(today.getFullYear(), today.getMonth() + monthOffset, 1);
-      const year = baseDate.getFullYear();
-      const month = baseDate.getMonth();
+          <div class="cube-link-wrapper">
+            <img src="images/cube.gif" alt="cube" />
+            <a href="#" id="random-track-link">surprise yourself</a>
+            <img src="images/cube.gif" alt="cube" />
+          </div>
 
-      const firstOfMonth = new Date(year, month, 1);
-      const firstWednesday = new Date(year, month, 1 + ((3 - firstOfMonth.getDay() + 7) % 7));
-      const fourthWednesday = new Date(year, month, firstWednesday.getDate() + 21);
-      
-      // Set show time window
-      const showStartTime = new Date(fourthWednesday).setHours(11, 0, 0, 0);
-      const showEndTime = new Date(fourthWednesday).setHours(12, 0, 0, 0);
-      
-      // 24 hours before show starts
-      const twentyFourHoursBefore = showStartTime - (24 * 60 * 60 * 1000);
+          <script>
+            function openRandomTrack(event) {
+              event.preventDefault();
+              if (typeof tracks !== 'undefined' && tracks.length > 0) {
+                var random_url = tracks[Math.floor(Math.random() * tracks.length)];
+                window.open(random_url, '_blank');
+              } else {
+                console.error("Tracks array is missing or empty");
+              }
+            }
+            document.getElementById('random-track-link').addEventListener('click', openRandomTrack);
+          </script>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <script>
+          function calculateNextFourthWednesday() {
+            const today = new Date();
 
-      if (today <= showEndTime) {
-        targetDate = {
-          start: showStartTime,
-          end: showEndTime,
-          preWindow: twentyFourHoursBefore,
-          dayOf: fourthWednesday
-        };
-      } else {
-        // move to next month if passed show
-        monthOffset++;
-      }
-    }
+            let targetDate = null;
+            let monthOffset = 0;
 
-    const element = document.getElementById('wednesday-text');
-    let message = "";
-    
-    if (today >= targetDate.preWindow && today <= targetDate.end) {
-      if (today.getDay() === 3) {
-        message = "🚨 Next show is TODAY 11:00–12:00! Tune in at subtleradio.com ";
-      } else {
-        message = "⏳ Next show is TOMORROW 11:00–12:00! Tune in at subtleradio.com ";
-      }
-    } else {
-      const cleanToday = new Date(today).setHours(0, 0, 0, 0);
-      const cleanTarget = new Date(targetDate.dayOf).setHours(0, 0, 0, 0);
-      
-      const diffInMs = cleanTarget - cleanToday;
-      const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
-      
-      message = `${diffInDays} days until next radio show \u00A0\u00A0 📻 \u00A0\u00A0`;
-    }
+            while (targetDate === null) {
+              const baseDate = new Date(today.getFullYear(), today.getMonth() + monthOffset, 1);
+              const year = baseDate.getFullYear();
+              const month = baseDate.getMonth();
 
-    element.innerText = message.repeat(5);
-  }
+              const firstOfMonth = new Date(year, month, 1);
+              const firstWednesday = new Date(year, month, 1 + ((3 - firstOfMonth.getDay() + 7) % 7));
+              const fourthWednesday = new Date(year, month, firstWednesday.getDate() + 21);
 
-  calculateNextFourthWednesday();
-</script>
-</div>  <footer>© 2026 package_emoji & tim-hy</footer>
-  </body>
+              const showStartTime = new Date(fourthWednesday).setHours(11, 0, 0, 0);
+              const showEndTime = new Date(fourthWednesday).setHours(12, 0, 0, 0);
+              const twentyFourHoursBefore = showStartTime - (24 * 60 * 60 * 1000);
+
+              if (today <= showEndTime) {
+                targetDate = {
+                  start: showStartTime,
+                  end: showEndTime,
+                  preWindow: twentyFourHoursBefore,
+                  dayOf: fourthWednesday
+                };
+              } else {
+                monthOffset++;
+              }
+            }
+
+            const element = document.getElementById('wednesday-text');
+            let message = "";
+
+            if (today >= targetDate.preWindow && today <= targetDate.end) {
+              if (today.getDay() === 3) {
+                message = "🚨 Next show is TODAY 11:00–12:00! Tune in at subtleradio.com ";
+              } else {
+                message = "⏳ Next show is TOMORROW 11:00–12:00! Tune in at subtleradio.com ";
+              }
+            } else {
+              const cleanToday = new Date(today).setHours(0, 0, 0, 0);
+              const cleanTarget = new Date(targetDate.dayOf).setHours(0, 0, 0, 0);
+              const diffInMs = cleanTarget - cleanToday;
+              const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+              message = `${diffInDays} days until next radio show \u00A0\u00A0 📻 \u00A0\u00A0`;
+            }
+
+            element.innerText = message.repeat(5);
+          }
+
+          calculateNextFourthWednesday();
+        </script>
+      </td>
+    </tr>
+    <tr>
+      <td><footer>© 2026 package_emoji &amp; tim-hy</footer></td>
+    </tr>
+  </table>
+</body>
 </html>
